@@ -11,7 +11,7 @@
 
 
 
-MiniSnip is an extremely fast and lightweight screen capture and OCR tool for Windows. It's built with native C++ and designed to use only built-in Windows dependencies, resulting in a tiny, portable application that uses minimal resources.
+MiniSnip is a portable (when downloaded through Github), extremely fast and lightweight screen capture and OCR tool for Windows. It's built with native C++ and designed to use only built-in Windows dependencies, resulting in a tiny, portable application that uses minimal resources.
 
 It lives in your system tray, stays out of your way, and provides a modern workflow.
 
