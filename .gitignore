@@ -1,3 +1,7 @@
+# OTHER
+*.txt
+*.py
+
 # Prerequisites
 *.d
 
