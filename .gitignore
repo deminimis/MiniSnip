@@ -2,6 +2,9 @@
 /.vs
 *.suo
 *.user
+/MiniSnip-Store/
+/Backups/
+file_combiner_settings.json
 
 # Build results
 [Dd]ebug/
