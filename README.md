@@ -23,6 +23,9 @@ It lives in your system tray, stays out of your way, and provides a modern workf
 
 
 
+## Requirements
+This should work out of the box for all newer Windows 10/11 installations. If you have an older or bootleg LTSC, make sure the ocr language pack is installed. Powershell as admin: `Add-WindowsCapability -Online -Name Language.OCR~~~en-US~0.0.1.0` 
+
 
 ## Features
 
