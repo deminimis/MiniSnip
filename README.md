@@ -1,8 +1,31 @@
-# MiniSnip
+<table style="border: none !important; border-collapse: collapse; width: auto;" cellpadding="0" cellspacing="0">
+    <tr>
+        <td style="border: none !important; vertical-align: middle; padding-right: 15px;">
+            <h1 style="border-bottom: none !important; margin: 0; font-size: 3em !important; display: inline-block;">MiniSnip</h1>
+        </td>
+        <td style="border: none !important; vertical-align: middle;">
+            <img src="assets/icon.png" alt="MiniSnip Icon" width="150">
+        </td>
+    </tr>
+</table>
 
-MiniSnip is an extremely fast and lightweight screen capture and OCR tool for Windows. It's built with native C++ and designed to use only built-in Windows dependencies, resulting in a tiny, portable application that uses minimal resources.
+
+
+MiniSnip is a portable (when downloaded through Github), extremely fast and lightweight screen capture and OCR tool for Windows. It's built with native C++ and designed to use only built-in Windows dependencies, resulting in a tiny, portable application that uses minimal resources.
 
 It lives in your system tray, stays out of your way, and provides a modern workflow.
+
+
+## Download
+<a href="https://apps.microsoft.com/detail/9PJC1MFX6VS1?hl=en-us&gl=US&ocid=pdpshare" target="_blank"><img src="https://get.microsoft.com/images/en-us%20dark.svg" alt="Get it from Microsoft" width="200" style="margin-top: 10px;"></a>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="https://github.com/deminimis/MiniSnip/releases/latest" target="_blank"><img src="https://img.shields.io/badge/Download_on-GitHub-181717?style=for-the-badge&logo=github&logoColor=white" alt="Download on GitHub" width="200"></a>
+
+
+
+## Requirements
+This should work out of the box for all newer Windows 10/11 installations. If you have an older or bootleg LTSC, make sure the ocr language pack is installed. Powershell as admin: `Add-WindowsCapability -Online -Name Language.OCR~~~en-US~0.0.1.0` 
+
 
 ## Features
 
