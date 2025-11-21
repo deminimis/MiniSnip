@@ -32,7 +32,7 @@ using namespace Gdiplus;
 
 constexpr UINT WM_APP_TRAY_MSG = WM_APP + 1;
 constexpr int HOTKEY_ID_SNIP_COPY = 1;
-constexpr int HOTKEY_ID_SNIP_SAVE = 2;=
+constexpr int HOTKEY_ID_SNIP_SAVE = 2;
 constexpr int HOTKEY_ID_SNIP_OCR = 3;
 constexpr int HOTKEY_ID_SNIP_INTERACTIVE = 4;
 
