@@ -1,6 +1,8 @@
 #pragma once
 
-#include <shobjidl.h>
+#include <windows.h>
+#include <shlobj.h>
+#include <knownfolders.h>
 #include <objbase.h>
 #include <comdef.h>
 #include <robuffer.h>
@@ -29,11 +31,15 @@
 using namespace Gdiplus;
 
 constexpr UINT WM_APP_TRAY_MSG = WM_APP + 1;
-constexpr int HOTKEY_ID_START_SNIP = 1;
+constexpr int HOTKEY_ID_SNIP_COPY = 1;
+constexpr int HOTKEY_ID_SNIP_SAVE = 2;=
+constexpr int HOTKEY_ID_SNIP_OCR = 3;
+constexpr int HOTKEY_ID_SNIP_INTERACTIVE = 4;
 
 constexpr UINT WM_APP_SHOW_NOTIFICATION = WM_APP + 2;
 constexpr UINT WM_APP_START_SNIP = WM_APP + 3;
 constexpr UINT WM_APP_SHOW_ACTION_TOOLBAR = WM_APP + 4;
+constexpr UINT WM_APP_UPDATE_HOTKEYS = WM_APP + 5;
 
 constexpr int NOTIFY_OCR_FAILED = 0;
 constexpr int NOTIFY_OCR_SUCCESS = 1;
@@ -53,11 +59,22 @@ constexpr int ID_TOOLBAR_COPY_OCR = 103;
 constexpr int ID_TOOLBAR_SAVE_OCR = 104;
 
 enum class SnippingMode {
-    None,
+    Interactive,
     CopyImage,
     SaveImage,
     OcrText,
     OcrTextSave
+};
+
+struct AppSettings {
+    DWORD hkCopyMod = MOD_CONTROL | MOD_SHIFT;
+    DWORD hkCopyKey = 0;
+    DWORD hkSaveMod = MOD_CONTROL | MOD_SHIFT;
+    DWORD hkSaveKey = 'S';
+    DWORD hkOcrMod = MOD_CONTROL | MOD_SHIFT;
+    DWORD hkOcrKey = 'X';
+    DWORD hkInteractiveMod = MOD_CONTROL | MOD_SHIFT;
+    DWORD hkInteractiveKey = 'C';
 };
 
 extern HINSTANCE g_hInstance;
@@ -68,7 +85,8 @@ extern HBITMAP g_hCroppedBitmap;
 extern POINT g_startPoint;
 extern POINT g_endPoint;
 extern bool g_isSelecting;
-extern HWND g_hOverlayWnd;
+extern std::vector<HWND> g_hOverlayWnds;
 extern HWND g_hActionToolbarWnd;
 extern ULONG_PTR g_gdiplusToken;
 extern SnippingMode g_currentMode;
+extern AppSettings g_settings;

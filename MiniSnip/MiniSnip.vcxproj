@@ -24,6 +24,7 @@
 		<ClCompile Include="main.cpp" />
 		<ClCompile Include="MainWindow.cpp" />
 		<ClCompile Include="NotificationWindow.cpp" />
+		<ClCompile Include="Settings.cpp" />
 		<ClCompile Include="Snipping.cpp" />
 		<ClCompile Include="Utilities.cpp" />
 	</ItemGroup>
@@ -33,6 +34,7 @@
 		<ClInclude Include="Common.h" />
 		<ClInclude Include="MainWindow.h" />
 		<ClInclude Include="NotificationWindow.h" />
+		<ClInclude Include="Settings.h" />
 		<ClInclude Include="resource.h" />
 		<ClInclude Include="Snipping.h" />
 		<ClInclude Include="Utilities.h" />
@@ -120,7 +122,7 @@
 		<Link>
 			<SubSystem>Windows</SubSystem>
 			<GenerateDebugInformation>true</GenerateDebugInformation>
-			<AdditionalDependencies>gdiplus.lib;runtimeobject.lib;%(AdditionalDependencies)</AdditionalDependencies>
+			<AdditionalDependencies>gdiplus.lib;runtimeobject.lib;dwmapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
 		</Link>
 		<Manifest>
 			<AdditionalManifestFiles>%(AdditionalManifestFiles)</AdditionalManifestFiles>
@@ -141,7 +143,7 @@
 		<Link>
 			<SubSystem>Windows</SubSystem>
 			<GenerateDebugInformation>true</GenerateDebugInformation>
-			<AdditionalDependencies>gdiplus.lib;runtimeobject.lib;%(AdditionalDependencies)</AdditionalDependencies>
+			<AdditionalDependencies>gdiplus.lib;runtimeobject.lib;dwmapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
 		</Link>
 		<Manifest>
 			<AdditionalManifestFiles>%(AdditionalManifestFiles)</AdditionalManifestFiles>
@@ -160,7 +162,7 @@
 		<Link>
 			<SubSystem>Windows</SubSystem>
 			<GenerateDebugInformation>true</GenerateDebugInformation>
-			<AdditionalDependencies>gdiplus.lib;runtimeobject.lib;%(AdditionalDependencies)</AdditionalDependencies>
+			<AdditionalDependencies>gdiplus.lib;runtimeobject.lib;dwmapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
 		</Link>
 		<Manifest>
 			<AdditionalManifestFiles>%(AdditionalManifestFiles)</AdditionalManifestFiles>
@@ -181,7 +183,7 @@
 		<Link>
 			<SubSystem>Windows</SubSystem>
 			<GenerateDebugInformation>true</GenerateDebugInformation>
-			<AdditionalDependencies>gdiplus.lib;runtimeobject.lib;%(AdditionalDependencies)</AdditionalDependencies>
+			<AdditionalDependencies>gdiplus.lib;runtimeobject.lib;dwmapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
 		</Link>
 		<Manifest>
 			<AdditionalManifestFiles>%(AdditionalManifestFiles)</AdditionalManifestFiles>

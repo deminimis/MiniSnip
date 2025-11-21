@@ -38,24 +38,19 @@ void AppendOcrTextToFile(const std::wstring& text)
 
         std::wstring wContent = ss.str();
 
-        // Convert wstring (UTF-16) to string (UTF-8)
         std::string utf8Content;
         if (!wContent.empty())
         {
-            // Get required buffer size
             int size_needed = WideCharToMultiByte(CP_UTF8, 0, &wContent[0], (int)wContent.size(), NULL, 0, NULL, NULL);
             utf8Content.resize(size_needed);
-            // Perform conversion
             WideCharToMultiByte(CP_UTF8, 0, &wContent[0], (int)wContent.size(), &utf8Content[0], size_needed, NULL, NULL);
         }
 
         try
         {
-            // Open as a byte stream and append
             std::ofstream outFile(filePath, std::ios::app | std::ios::binary);
             if (outFile)
             {
-                // Write the UTF-8 bytes
                 outFile.write(utf8Content.c_str(), utf8Content.size());
                 outFile.close();
             }
