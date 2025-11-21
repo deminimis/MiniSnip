@@ -2,7 +2,7 @@
 #include "Common.h"
 
 bool RegisterSnippingOverlayClass();
-void StartSnipping();
+void StartSnipping(SnippingMode mode = SnippingMode::Interactive);
 LRESULT CALLBACK OverlayWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 HBITMAP TakeFullscreenScreenshot();
 RECT GetSelectionRect();
