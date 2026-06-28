@@ -1,6 +1,7 @@
 #include "Settings.h"
-#include <commctrl.h>
 #include <dwmapi.h>
+#include <uxtheme.h>
+#pragma comment(lib, "uxtheme.lib")
 
 AppSettings g_settings;
 
@@ -27,7 +28,7 @@ void SetRunAtStartup(bool enable)
         {
             WCHAR szPath[MAX_PATH] = { 0 };
             GetModuleFileNameW(NULL, szPath, MAX_PATH);
-            RegSetValueExW(hKey, L"MiniSnip", 0, REG_SZ, (BYTE*)szPath, ((DWORD)wcslen(szPath) + 1) * sizeof(WCHAR));
+            RegSetValueExW(hKey, L"MiniSnip", 0, REG_SZ, (BYTE*)szPath, (DWORD)((wcslen(szPath) + 1) * sizeof(WCHAR)));
         }
         else
         {
@@ -131,12 +132,14 @@ static INT_PTR CALLBACK SettingsDlgProc(HWND hDlg, UINT message, WPARAM wParam, 
     {
     case WM_INITDIALOG:
     {
-        // Enable Dark Mode for Title Bar
+        // Dark title bar
         BOOL value = TRUE;
         DwmSetWindowAttribute(hDlg, 20, &value, sizeof(value));
 
-        // Create Dark Background Brush (Dark Grey)
+        // Dark background
         hBrushBg = CreateSolidBrush(RGB(32, 32, 32));
+
+        SetWindowTheme(GetDlgItem(hDlg, IDC_CHECK_STARTUP), L"", L"");
 
         SendDlgItemMessage(hDlg, IDC_HOTKEY_COPY, HKM_SETHOTKEY, MAKEWORD(g_settings.hkCopyKey, GetHkCombo(g_settings.hkCopyMod)), 0);
         SendDlgItemMessage(hDlg, IDC_HOTKEY_SAVE, HKM_SETHOTKEY, MAKEWORD(g_settings.hkSaveKey, GetHkCombo(g_settings.hkSaveMod)), 0);

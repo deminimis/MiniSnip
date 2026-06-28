@@ -1,8 +1,7 @@
 #include "ActionToolbar.h"
 #include "Actions.h"
-#include <windowsx.h>
 #include <dwmapi.h>
-#include <CommCtrl.h>
+#include "Utilities.h"
 
 #pragma comment(lib, "dwmapi.lib")
 #pragma comment(lib, "Comctl32.lib")
@@ -94,10 +93,10 @@ LRESULT CALLBACK ActionToolbarWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARA
 
         g_hToolbarFont = CreateFontW(-fontSize, 0, 0, 0, FW_NORMAL, FALSE, FALSE, FALSE, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_SWISS, L"Segoe UI");
 
-        HWND hBtnCopyImg = CreateWindowW(L"BUTTON", L"Copy Image", WS_CHILD | WS_VISIBLE | BS_OWNERDRAW, padding, padding, btnWidth, btnHeight, hWnd, (HMENU)ID_TOOLBAR_COPY_IMG, g_hInstance, NULL);
-        HWND hBtnSaveImg = CreateWindowW(L"BUTTON", L"Save Image", WS_CHILD | WS_VISIBLE | BS_OWNERDRAW, btnWidth + 2 * padding, padding, btnWidth, btnHeight, hWnd, (HMENU)ID_TOOLBAR_SAVE_IMG, g_hInstance, NULL);
-        HWND hBtnCopyOcr = CreateWindowW(L"BUTTON", L"Copy Text", WS_CHILD | WS_VISIBLE | BS_OWNERDRAW, (btnWidth * 2) + 3 * padding, padding, btnWidth, btnHeight, hWnd, (HMENU)ID_TOOLBAR_COPY_OCR, g_hInstance, NULL);
-        HWND hBtnSaveOcr = CreateWindowW(L"BUTTON", L"Save Text", WS_CHILD | WS_VISIBLE | BS_OWNERDRAW, (btnWidth * 3) + 4 * padding, padding, btnWidth, btnHeight, hWnd, (HMENU)ID_TOOLBAR_SAVE_OCR, g_hInstance, NULL);
+        HWND hBtnCopyImg = CreateWindowW(L"BUTTON", LoadLocString(IDS_TOOLBAR_COPY_IMG).c_str(), WS_CHILD | WS_VISIBLE | BS_OWNERDRAW, padding, padding, btnWidth, btnHeight, hWnd, (HMENU)ID_TOOLBAR_COPY_IMG, g_hInstance, NULL);
+        HWND hBtnSaveImg = CreateWindowW(L"BUTTON", LoadLocString(IDS_TOOLBAR_SAVE_IMG).c_str(), WS_CHILD | WS_VISIBLE | BS_OWNERDRAW, btnWidth + 2 * padding, padding, btnWidth, btnHeight, hWnd, (HMENU)ID_TOOLBAR_SAVE_IMG, g_hInstance, NULL);
+        HWND hBtnCopyOcr = CreateWindowW(L"BUTTON", LoadLocString(IDS_TOOLBAR_COPY_OCR).c_str(), WS_CHILD | WS_VISIBLE | BS_OWNERDRAW, (btnWidth * 2) + 3 * padding, padding, btnWidth, btnHeight, hWnd, (HMENU)ID_TOOLBAR_COPY_OCR, g_hInstance, NULL);
+        HWND hBtnSaveOcr = CreateWindowW(L"BUTTON", LoadLocString(IDS_TOOLBAR_SAVE_OCR).c_str(), WS_CHILD | WS_VISIBLE | BS_OWNERDRAW, (btnWidth * 3) + 4 * padding, padding, btnWidth, btnHeight, hWnd, (HMENU)ID_TOOLBAR_SAVE_OCR, g_hInstance, NULL);
 
         SendMessage(hBtnCopyImg, WM_SETFONT, (WPARAM)g_hToolbarFont, TRUE);
         SendMessage(hBtnSaveImg, WM_SETFONT, (WPARAM)g_hToolbarFont, TRUE);
