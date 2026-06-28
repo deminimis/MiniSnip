@@ -4,9 +4,42 @@
 
 AppSettings g_settings;
 
-std::wstring GetSettingsFilePath()
+bool IsRunAtStartup()
 {
-    WCHAR szPath[MAX_PATH];
+    HKEY hKey;
+    if (RegOpenKeyExW(HKEY_CURRENT_USER, L"Software\\Microsoft\\Windows\\CurrentVersion\\Run", 0, KEY_READ, &hKey) == ERROR_SUCCESS)
+    {
+        WCHAR szPath[MAX_PATH] = { 0 };
+        DWORD cbData = sizeof(szPath);
+        LSTATUS status = RegQueryValueExW(hKey, L"MiniSnip", NULL, NULL, (LPBYTE)szPath, &cbData);
+        RegCloseKey(hKey);
+        return (status == ERROR_SUCCESS);
+    }
+    return false;
+}
+
+void SetRunAtStartup(bool enable)
+{
+    HKEY hKey;
+    if (RegOpenKeyExW(HKEY_CURRENT_USER, L"Software\\Microsoft\\Windows\\CurrentVersion\\Run", 0, KEY_SET_VALUE, &hKey) == ERROR_SUCCESS)
+    {
+        if (enable)
+        {
+            WCHAR szPath[MAX_PATH] = { 0 };
+            GetModuleFileNameW(NULL, szPath, MAX_PATH);
+            RegSetValueExW(hKey, L"MiniSnip", 0, REG_SZ, (BYTE*)szPath, ((DWORD)wcslen(szPath) + 1) * sizeof(WCHAR));
+        }
+        else
+        {
+            RegDeleteValueW(hKey, L"MiniSnip");
+        }
+        RegCloseKey(hKey);
+    }
+}
+
+static std::wstring GetSettingsFilePath()
+{
+    WCHAR szPath[MAX_PATH] = { 0 };
     if (GetModuleFileName(NULL, szPath, MAX_PATH))
     {
         std::wstring exePath(szPath);
@@ -67,7 +100,7 @@ void SaveSettings()
     WritePrivateProfileString(L"Hotkeys", L"InteractiveKey", std::to_wstring(g_settings.hkInteractiveKey).c_str(), path.c_str());
 }
 
-WORD GetHkCombo(DWORD mod)
+static WORD GetHkCombo(DWORD mod)
 {
     WORD w = 0;
     if (mod & MOD_CONTROL) w |= HOTKEYF_CONTROL;
@@ -76,7 +109,7 @@ WORD GetHkCombo(DWORD mod)
     return w;
 }
 
-DWORD GetModFromHk(WORD w)
+static DWORD GetModFromHk(WORD w)
 {
     DWORD mod = 0;
     if (w & HOTKEYF_CONTROL) mod |= MOD_CONTROL;
@@ -85,7 +118,7 @@ DWORD GetModFromHk(WORD w)
     return mod;
 }
 
-INT_PTR CALLBACK SettingsDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
+static INT_PTR CALLBACK SettingsDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
     static HBRUSH hBrushBg = NULL;
     switch (message)
@@ -103,6 +136,7 @@ INT_PTR CALLBACK SettingsDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
         SendDlgItemMessage(hDlg, IDC_HOTKEY_SAVE, HKM_SETHOTKEY, MAKEWORD(g_settings.hkSaveKey, GetHkCombo(g_settings.hkSaveMod)), 0);
         SendDlgItemMessage(hDlg, IDC_HOTKEY_OCR, HKM_SETHOTKEY, MAKEWORD(g_settings.hkOcrKey, GetHkCombo(g_settings.hkOcrMod)), 0);
         SendDlgItemMessage(hDlg, IDC_HOTKEY_INTERACTIVE, HKM_SETHOTKEY, MAKEWORD(g_settings.hkInteractiveKey, GetHkCombo(g_settings.hkInteractiveMod)), 0);
+        CheckDlgButton(hDlg, IDC_CHECK_STARTUP, IsRunAtStartup() ? BST_CHECKED : BST_UNCHECKED);
 
         return (INT_PTR)TRUE;
     }
@@ -133,6 +167,9 @@ INT_PTR CALLBACK SettingsDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
             WORD hkInteractive = (WORD)SendDlgItemMessage(hDlg, IDC_HOTKEY_INTERACTIVE, HKM_GETHOTKEY, 0, 0);
             g_settings.hkInteractiveKey = LOBYTE(hkInteractive);
             g_settings.hkInteractiveMod = GetModFromHk(HIBYTE(hkInteractive));
+
+            bool runAtStartup = (IsDlgButtonChecked(hDlg, IDC_CHECK_STARTUP) == BST_CHECKED);
+            SetRunAtStartup(runAtStartup);
 
             SaveSettings();
             EndDialog(hDlg, LOWORD(wParam));
