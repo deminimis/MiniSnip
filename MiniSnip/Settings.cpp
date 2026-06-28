@@ -70,6 +70,10 @@ void LoadSettings()
 {
     std::wstring path = GetSettingsFilePath();
 
+    WCHAR szLang[64] = { 0 };
+    GetPrivateProfileStringW(L"Settings", L"OcrLanguage", L"", szLang, 64, path.c_str());
+    g_settings.ocrLanguage = szLang;
+
     g_settings.hkCopyMod = GetPrivateProfileInt(L"Hotkeys", L"CopyMod", g_settings.hkCopyMod, path.c_str());
     g_settings.hkCopyKey = GetPrivateProfileInt(L"Hotkeys", L"CopyKey", g_settings.hkCopyKey, path.c_str());
 
@@ -86,6 +90,8 @@ void LoadSettings()
 void SaveSettings()
 {
     std::wstring path = GetSettingsFilePath();
+
+    WritePrivateProfileStringW(L"Settings", L"OcrLanguage", g_settings.ocrLanguage.c_str(), path.c_str());
 
     WritePrivateProfileString(L"Hotkeys", L"CopyMod", std::to_wstring(g_settings.hkCopyMod).c_str(), path.c_str());
     WritePrivateProfileString(L"Hotkeys", L"CopyKey", std::to_wstring(g_settings.hkCopyKey).c_str(), path.c_str());
@@ -138,6 +144,31 @@ static INT_PTR CALLBACK SettingsDlgProc(HWND hDlg, UINT message, WPARAM wParam, 
         SendDlgItemMessage(hDlg, IDC_HOTKEY_INTERACTIVE, HKM_SETHOTKEY, MAKEWORD(g_settings.hkInteractiveKey, GetHkCombo(g_settings.hkInteractiveMod)), 0);
         CheckDlgButton(hDlg, IDC_CHECK_STARTUP, IsRunAtStartup() ? BST_CHECKED : BST_UNCHECKED);
 
+        // Populate OCR Languages Dropdown
+        HWND hCombo = GetDlgItem(hDlg, IDC_COMBO_LANGUAGE);
+        SendMessage(hCombo, CB_ADDSTRING, 0, (LPARAM)L"Default (System Profile)");
+
+        auto languages = winrt::Windows::Media::Ocr::OcrEngine::AvailableRecognizerLanguages();
+        int selectedIndex = 0;
+        int currentIndex = 1;
+
+        for (auto const& lang : languages)
+        {
+            std::wstring langName = lang.DisplayName().c_str();
+            std::wstring langTag = lang.LanguageTag().c_str();
+            std::wstring displayText = langName + L" (" + langTag + L")";
+
+            int idx = (int)SendMessage(hCombo, CB_ADDSTRING, 0, (LPARAM)displayText.c_str());
+            SendMessage(hCombo, CB_SETITEMDATA, idx, (LPARAM)new std::wstring(langTag));
+
+            if (g_settings.ocrLanguage == langTag)
+            {
+                selectedIndex = currentIndex;
+            }
+            currentIndex++;
+        }
+        SendMessage(hCombo, CB_SETCURSEL, selectedIndex, 0);
+
         return (INT_PTR)TRUE;
     }
     case WM_CTLCOLORDLG:
@@ -171,6 +202,18 @@ static INT_PTR CALLBACK SettingsDlgProc(HWND hDlg, UINT message, WPARAM wParam, 
             bool runAtStartup = (IsDlgButtonChecked(hDlg, IDC_CHECK_STARTUP) == BST_CHECKED);
             SetRunAtStartup(runAtStartup);
 
+            HWND hCombo = GetDlgItem(hDlg, IDC_COMBO_LANGUAGE);
+            int selIdx = (int)SendMessage(hCombo, CB_GETCURSEL, 0, 0);
+            if (selIdx > 0)
+            {
+                std::wstring* pTag = (std::wstring*)SendMessage(hCombo, CB_GETITEMDATA, selIdx, 0);
+                if (pTag && pTag != (std::wstring*)CB_ERR) g_settings.ocrLanguage = *pTag;
+            }
+            else
+            {
+                g_settings.ocrLanguage = L"";
+            }
+
             SaveSettings();
             EndDialog(hDlg, LOWORD(wParam));
             return (INT_PTR)TRUE;
@@ -182,8 +225,17 @@ static INT_PTR CALLBACK SettingsDlgProc(HWND hDlg, UINT message, WPARAM wParam, 
         }
         break;
     case WM_DESTROY:
+    {
+        HWND hCombo = GetDlgItem(hDlg, IDC_COMBO_LANGUAGE);
+        int count = (int)SendMessage(hCombo, CB_GETCOUNT, 0, 0);
+        for (int i = 1; i < count; i++) 
+        {
+            std::wstring* pTag = (std::wstring*)SendMessage(hCombo, CB_GETITEMDATA, i, 0);
+            if (pTag && pTag != (std::wstring*)CB_ERR) delete pTag;
+        }
         if (hBrushBg) DeleteObject(hBrushBg);
         break;
+    }
     }
     return (INT_PTR)FALSE;
 }
