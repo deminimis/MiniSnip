@@ -5,8 +5,7 @@
 #include "Settings.h"
 
 HWND g_hMainWnd = NULL;
-
-void UpdateHotkeys(HWND hWnd)
+static void UpdateHotkeys(HWND hWnd)
 {
     UnregisterHotKey(hWnd, HOTKEY_ID_SNIP_COPY);
     UnregisterHotKey(hWnd, HOTKEY_ID_SNIP_SAVE);

@@ -1,5 +1,5 @@
 #include "NotificationWindow.h"
-#include <gdiplus.h>
+#include "Utilities.h"
 
 using namespace Gdiplus;
 HWND g_hNotificationWnd = NULL;
@@ -88,23 +88,23 @@ LRESULT CALLBACK NotificationWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM
         switch (wParam)
         {
         case NOTIFY_COPY_SUCCESS:
-            s_notificationText = L"Copied to Clipboard";
+            s_notificationText = LoadLocString(IDS_NOTIFY_COPY_SUCCESS);
             break;
         case NOTIFY_SAVE_SUCCESS:
-            s_notificationText = L"Saved to File";
+            s_notificationText = LoadLocString(IDS_NOTIFY_SAVE_SUCCESS);
             break;
         case NOTIFY_OCR_SUCCESS:
-            s_notificationText = L"OCR Text Copied";
+            s_notificationText = LoadLocString(IDS_NOTIFY_OCR_SUCCESS);
             break;
         case NOTIFY_OCR_SAVE_SUCCESS:
-            s_notificationText = L"OCR Text Saved to File";
+            s_notificationText = LoadLocString(IDS_NOTIFY_OCR_SAVE_SUCCESS);
             break;
         case NOTIFY_OCR_NOTEXT:
-            s_notificationText = L"OCR: No Text Found";
+            s_notificationText = LoadLocString(IDS_NOTIFY_OCR_NOTEXT);
             break;
         case NOTIFY_OCR_FAILED:
         default:
-            s_notificationText = L"OCR Failed";
+            s_notificationText = LoadLocString(IDS_NOTIFY_OCR_FAILED);
             break;
         }
 

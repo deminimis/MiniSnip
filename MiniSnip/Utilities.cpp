@@ -1,4 +1,8 @@
 #include "Utilities.h"
+#include <shlobj.h>
+#include <fstream>
+#include <iomanip>
+#include <chrono>
 
 void CopyTextToClipboard(const std::wstring& text)
 {
@@ -8,8 +12,12 @@ void CopyTextToClipboard(const std::wstring& text)
         HGLOBAL hg = GlobalAlloc(GMEM_MOVEABLE, (text.length() + 1) * sizeof(wchar_t));
         if (hg)
         {
-            memcpy(GlobalLock(hg), text.c_str(), (text.length() + 1) * sizeof(wchar_t));
-            GlobalUnlock(hg);
+            void* pLocked = GlobalLock(hg);
+            if (pLocked)
+            {
+                memcpy(pLocked, text.c_str(), (text.length() + 1) * sizeof(wchar_t));
+                GlobalUnlock(hg);
+            }
             SetClipboardData(CF_UNICODETEXT, hg);
         }
         CloseClipboard();
@@ -135,4 +143,11 @@ std::wstring SaveHBitmapToTempFile(HBITMAP hBitmap)
     }
 
     return pngFilePath;
+}
+
+std::wstring LoadLocString(UINT id)
+{
+    WCHAR buffer[256] = { 0 };
+    LoadStringW(g_hInstance, id, buffer, 256);
+    return buffer;
 }

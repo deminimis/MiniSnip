@@ -23,7 +23,7 @@ bool RegisterSnippingOverlayClass()
     return RegisterClass(&wcOverlay) != 0;
 }
 
-void CloseAllOverlays()
+static void CloseAllOverlays()
 {
     for (HWND hwnd : g_hOverlayWnds)
     {
@@ -114,11 +114,14 @@ LRESULT CALLBACK OverlayWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 
         if (hMonitorCursor == hMonitorWnd)
         {
-            const WCHAR* modeText = L"Select area";
-            if (g_currentMode == SnippingMode::CopyImage) modeText = L"Select area to Copy Image";
-            else if (g_currentMode == SnippingMode::SaveImage) modeText = L"Select area to Save Image";
-            else if (g_currentMode == SnippingMode::OcrText) modeText = L"Select area to OCR";
-            else modeText = L"Select area to Snip";
+            std::wstring modeTextStr;
+
+            if (g_currentMode == SnippingMode::CopyImage) modeTextStr = LoadLocString(IDS_OVERLAY_MODE_COPY);
+            else if (g_currentMode == SnippingMode::SaveImage) modeTextStr = LoadLocString(IDS_OVERLAY_MODE_SAVE);
+            else if (g_currentMode == SnippingMode::OcrText) modeTextStr = LoadLocString(IDS_OVERLAY_MODE_OCR);
+            else modeTextStr = LoadLocString(IDS_OVERLAY_MODE_DEFAULT);
+
+            const WCHAR* modeText = modeTextStr.c_str();
 
             UINT dpi = GetDpiForWindow(hWnd);
             int fontSize = MulDiv(24, dpi, 96);

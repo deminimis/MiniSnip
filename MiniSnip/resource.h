@@ -26,3 +26,21 @@
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif
+
+// String Table IDs
+#define IDS_NOTIFY_COPY_SUCCESS      2001
+#define IDS_NOTIFY_SAVE_SUCCESS      2002
+#define IDS_NOTIFY_OCR_SUCCESS       2003
+#define IDS_NOTIFY_OCR_SAVE_SUCCESS  2004
+#define IDS_NOTIFY_OCR_NOTEXT        2005
+#define IDS_NOTIFY_OCR_FAILED        2006
+
+#define IDS_TOOLBAR_COPY_IMG         2010
+#define IDS_TOOLBAR_SAVE_IMG         2011
+#define IDS_TOOLBAR_COPY_OCR         2012
+#define IDS_TOOLBAR_SAVE_OCR         2013
+
+#define IDS_OVERLAY_MODE_COPY        2020
+#define IDS_OVERLAY_MODE_SAVE        2021
+#define IDS_OVERLAY_MODE_OCR         2022
+#define IDS_OVERLAY_MODE_DEFAULT     2023
