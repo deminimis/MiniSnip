@@ -25,6 +25,7 @@
 #include <winrt/Windows.Foundation.Collections.h>
 #include <winrt/Windows.Graphics.Imaging.h>
 #include <winrt/Windows.Media.Ocr.h>
+#include <winrt/Windows.Globalization.h>
 #include <winrt/Windows.Storage.h>
 #include <winrt/Windows.Storage.Streams.h>
 
@@ -67,6 +68,7 @@ enum class SnippingMode {
 };
 
 struct AppSettings {
+    std::wstring ocrLanguage = L"";
     DWORD hkCopyMod = MOD_CONTROL | MOD_SHIFT;
     DWORD hkCopyKey = 0;
     DWORD hkSaveMod = MOD_CONTROL | MOD_SHIFT;

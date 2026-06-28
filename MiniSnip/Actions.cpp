@@ -47,7 +47,25 @@ static void PerformOcr_Thread(HBITMAP hBitmap, SnippingMode mode)
         return;
     }
 
-    auto ocrEngine = winrt::Windows::Media::Ocr::OcrEngine::TryCreateFromUserProfileLanguages();
+    winrt::Windows::Media::Ocr::OcrEngine ocrEngine = nullptr;
+
+    if (!g_settings.ocrLanguage.empty())
+    {
+        try {
+            winrt::Windows::Globalization::Language lang(g_settings.ocrLanguage);
+            ocrEngine = winrt::Windows::Media::Ocr::OcrEngine::TryCreateFromLanguage(lang);
+        }
+        catch (...) {
+            // Silently fallback if manual language selection fails
+        }
+    }
+
+    // Fallback to profile default if no specific language was set, or if the manual attempt failed
+    if (ocrEngine == nullptr)
+    {
+        ocrEngine = winrt::Windows::Media::Ocr::OcrEngine::TryCreateFromUserProfileLanguages();
+    }
+
     if (ocrEngine == nullptr)
     {
         PostMessage(g_hMainWnd, WM_APP_SHOW_NOTIFICATION, NOTIFY_OCR_FAILED, 0);
