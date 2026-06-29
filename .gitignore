@@ -16,6 +16,7 @@ x64/
 # OTHER
 *.txt
 *.py
+*.pyw
 
 # Prerequisites
 *.d
